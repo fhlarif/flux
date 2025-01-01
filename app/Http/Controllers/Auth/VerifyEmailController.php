@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 final class VerifyEmailController extends Controller
 {
@@ -20,7 +20,7 @@ final class VerifyEmailController extends Controller
         $user = $request->user();
         if ($user) {
             if ($user->hasVerifiedEmail()) {
-                return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+                return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
             }
 
             if (config('auth.providers.users.verify') && $user->markEmailAsVerified()) {
@@ -28,6 +28,6 @@ final class VerifyEmailController extends Controller
             }
         }
 
-        return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Livewire\Volt\Volt;
+use Illuminate\Support\ServiceProvider;
 
 final class VoltServiceProvider extends ServiceProvider
 {

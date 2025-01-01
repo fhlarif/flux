@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Livewire\Forms;
 
+use Livewire\Form;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Validate;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Validate;
-use Livewire\Form;
 
 final class LoginForm extends Form
 {
@@ -31,8 +31,9 @@ final class LoginForm extends Form
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+        $credentials = is_array($this->only(['email', 'password'])) ? $this->only(['email', 'password']) : [];
 
-        if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+        if (! Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -46,7 +47,7 @@ final class LoginForm extends Form
     /**
      * Ensure the authentication request is not rate limited.
      */
-    protected function ensureIsNotRateLimited(): void
+    private function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
@@ -67,8 +68,8 @@ final class LoginForm extends Form
     /**
      * Get the authentication rate limiting throttle key.
      */
-    protected function throttleKey(): string
+    private function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

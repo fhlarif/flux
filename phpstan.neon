@@ -1,11 +1,13 @@
 includes:
-    - vendor/larastan/larastan/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
-    checkMissingIterableValueType: true
-
-    level: max
+    universalObjectCratesClasses:
+        - Spatie\Permission\Models\Role
+        - Spatie\Permission\Models\Permission
+    # bootstrapFiles:
+    #     - phpstan_stubs.php
 
     paths:
         - app
@@ -13,3 +15,15 @@ parameters:
         - bootstrap
         - database/factories
         - routes
+
+    level: max
+
+    treatPhpDocTypesAsCertain: true
+
+    #ignoreErrors:
+    #   - '#PHPDoc tag @var#'
+
+    excludePaths:
+        - ./tests/*
+
+    # memoryLimitFile: "2024M"
